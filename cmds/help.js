@@ -12,7 +12,7 @@ module.exports = {
             .addField('!out', 'Poista itsesi pelaajarosterista')
             .addField('!clear', 'Tyhjennä rosteri')
             .addField('!rosteri', 'Näytä pelaajarosteri' )
-            .setFooter('(c) TemeASD#1134')
+            .setFooter('(c) TemeASD#1134','','https://github.com/TemeASD/esfi-botti')
         message.channel.send(embed);
     }
 }
