@@ -3,17 +3,7 @@
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
-
-
-## Table of Contents
-
-
-- [esfi-botti](#esfi-botti)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-    - [Setup](#setup)
-  - [Features](#features)
-  - [License](#license)
+Bot for organizing games on Discord. Not fancy at all. 
 
 
 ---
@@ -38,16 +28,21 @@
 $ npm install
 ```
 
+### Run
+
+```shell
+$ node bot.js
+```
 
 ---
 
 ## Features
 
-None. 
+Quite literally nothing at all
 
 ## License
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
-- Copyright 2015 © <a href="http://fvcproductions.com" target="_blank">FVCproductions</a>.
+- Copyright 2020 © <a href="temeasd.github.io" target="_blank">TemeASD</a>.
