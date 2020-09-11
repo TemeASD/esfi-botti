@@ -3,14 +3,13 @@
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
-Bot for organizing games on Discord. Not fancy at all. 
-
+Bot for organizing games on Discord. Not fancy at all.
 
 ---
 
 ## Installation
 
-- Create a config.json. Should look like this 
+- Create a config.json. Should look like this: 
 
 ```json
 {
@@ -18,6 +17,11 @@ Bot for organizing games on Discord. Not fancy at all.
     "prefix": "prefix_of_your_choice"
 }
 ```
+
+### Dependencies
+
+- Node.js v12+
+- npm
 
 ### Setup
 
