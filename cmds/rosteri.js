@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const gameName = "10man"
 module.exports = {
-    name: 'jono',
+    name: 'rosteri',
     description: 'Ketä on jonossa',
     execute: async (bot, message, args) => {
         try {
