@@ -1,15 +1,14 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const gameName = "10man"
 module.exports = {
     name: 'rosteri',
     description: 'Ketä on jonossa',
     execute: async (bot, message, args) => {
         try {
-            if (!fs.existsSync(`./games/${gameName}.json`)) {
-                fs.writeFileSync(`./games/${gameName}.json`, JSON.stringify({}));
+            if (!fs.existsSync(`./games/rosteri.json`)) {
+                fs.writeFileSync(`./games/rosteri.json`, JSON.stringify({}));
             }
-            fs.readFile(`./games/${gameName}.json`, (err, content) => {
+            fs.readFile(`./games/rosteri.json`, (err, content) => {
                 if (err) return console.error(err);
                 let gamers = JSON.parse(content);
 

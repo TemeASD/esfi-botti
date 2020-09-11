@@ -6,17 +6,17 @@ module.exports = {
     description: 'Lisää itsesi pelaajarosteriin',
     execute: async (bot, message, args) => {
         try {
-                if (!fs.existsSync(`./games/${gameName}.json`)) {
-                    fs.writeFileSync(`./games/${gameName}.json`, JSON.stringify({}));
+                if (!fs.existsSync(`./games/rosteri.json`)) {
+                    fs.writeFileSync(`./games/rosteri.json`, JSON.stringify({}));
                 } 
-                fs.readFile(`./games/${gameName}.json`, (err, content) => {
+                fs.readFile(`./games/rosteri.json`, (err, content) => {
                     if (err) return console.error(err);
                     let gamers = JSON.parse(content);
 
                     if (Object.keys(gamers).indexOf(message.author.id) > -1) return message.channel.send(`Olet jo rosterissa.`);
                     gamers[message.author.id] = (!message.member.nickname) ? message.author.username : message.member.nickname;
 
-                    fs.writeFile(`./games/${gameName}.json`, JSON.stringify(gamers, null, '\t'), err => {
+                    fs.writeFile(`./games/rosteri.json`, JSON.stringify(gamers, null, '\t'), err => {
                         if (err) return console.error(err);
                     });
 
