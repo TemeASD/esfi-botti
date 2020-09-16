@@ -4,7 +4,7 @@ const { CSGO_PATH, prefix, token } = require('./config.json');
 const Discord = require('discord.js');
 const fs = require('fs');
 const bot = new Discord.Client({ disableEveryone: true });
-
+const { spawn } = require('child_process');
 bot.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./cmds').filter(file => file.endsWith('.js'));
@@ -34,7 +34,7 @@ bot.on('message', async (message) => {
 
     const args = message.content.toLowerCase().split(/ +/);
     const commandName = args.shift();
-
+    
     if (commandName.startsWith(prefix)) {
         try {
             const cmds = commandName.slice(prefix.length);
