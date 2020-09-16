@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const gameName = "10man"
 module.exports = {
     name: 'join',
     description: 'Lisää itsesi pelaajarosteriin',
