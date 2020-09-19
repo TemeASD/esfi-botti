@@ -14,8 +14,11 @@ Bot for organizing games on Discord. Not fancy at all.
 ```json
 {
     "token": "TOKEN_FROM_DISCORD",
-    "prefix": "prefix_of_your_choice"
+    "prefix": "prefix_of_your_choice",
+    "CSGO_PATH": "/path/to/csgo/server/",
+    "CSGO_srv_token": "TOKEN_FROM_VALVE"
 }
+
 ```
 
 ### Dependencies
