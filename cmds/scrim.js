@@ -63,6 +63,7 @@ module.exports = {
     name: 'scrim',
     description: 'Assign yourself to a team then start a server to jump right in',
     execute: async (bot, message, args, child) => {
+        console.log(child)
         if (!args.length) {
             fs.readFile('./games/scrim.json', (err, content) => {
                 if (err) return console.error(err);
@@ -144,6 +145,7 @@ module.exports = {
         }
 
         if (args[0] === 'end') {
+            console.log(child, 'asd')
             child.stdin.write(`quit\n`);
             message.channel.send('Server shutting down.');
             const roster = {
