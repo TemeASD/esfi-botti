@@ -42,7 +42,6 @@ bot.on('message', async (message) => {
             if (cmds.includes(prefix)) return;
             if (!command) return;
             if (command.args && !args.length) return message.channel.send(`Anna argumentti. Kirjoita \`${prefix}help ${command.name}\` nähdäksesi kuinka komentoa käytetään.`);
-
             command.execute(bot, message, args, child);
         } catch (error) {
             console.error(error);
