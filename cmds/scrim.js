@@ -4,6 +4,7 @@ const http = require('http');
 const { CSGO_PATH, CSGO_srv_token, steam_web_api_key } = require('../config.json');
 const { exec } = require('child_process');
 const util = require('util');
+const utils = require('../utils/utils.js')
 let connect = ''
 
 function connectString() {
@@ -16,6 +17,7 @@ function connectString() {
         }
     });
 }
+
 class Roster {
     constructor(players) {
         this.player1 = players[0];
@@ -69,6 +71,7 @@ TODO: fix :D
 */
 let team1 = []
 let team2 = []
+
 module.exports = {
     name: 'scrim',
     description: 'Assign yourself to a team then start a server to jump right in',
@@ -91,6 +94,23 @@ module.exports = {
                 .setFooter('(c) TemeASD#1134', '', 'https://github.com/TemeASD/esfi-botti')
             return message.channel.send(embed);
 
+        }
+        if (args[0] === 'test') {
+            if (message.author.id != '183934154558275584') return;
+            const rosterArray = ['STEAM_0:1:11898431', 'STEAM_1:1:.....', 'STEAM_1:1:.....', 'STEAM_1:1:.....', 'STEAM_1:1:.....'];
+            const testRoster = new Roster(rosterArray);
+            if (!args[1]) return message.channel.send('Gimme a map, for example "de_dust2"');
+            fs.readFile('./games/maps.json', (err, content) => {
+                if (err) return console.error(err);
+                const maps = JSON.parse(content);
+                if (!utils.nameDoesNotExist(args[1], maps)) return message.channel.send(`Accepted maps: ${maps.map(map => map.name).join(", ")}`);
+                //select a random map
+                
+                args[1] = utils.getSingleMap(args[1], maps)
+                console.log('Random map is:', args[1].name)
+                startServer(testRoster, args[1], message, bot, child);
+            })
+            /*if succeeded lets read the ready scrim json and do some validation*/
         }
         if (!args.length) {
             message.channel.send(scrimTeamsEmbed(team1, team2));
@@ -131,10 +151,10 @@ module.exports = {
             fs.readFile('./games/maps.json', (err, content) => {
                 if (err) return console.error(err);
                 const maps = JSON.parse(content);
-                if (!nameDoesNotExist(args[1], maps)) return message.channel.send(`Accepted maps: ${maps.map(map => map.name).join(", ")}`);
+                if (!utils.nameDoesNotExist(args[1], maps)) return message.channel.send(`Accepted maps: ${maps.map(map => map.name).join(", ")}`);
                 if (args[1] === 'random') { args[1] = maps[Math.floor(Math.random() * maps.length)].name; }
                 message.channel.send(`You've selected random map, it is: ${args[1]} and there are no re-rolls here cap!`)
-                args[1] = getSingleMap(args[1], maps)
+                args[1] = utils.getSingleMap(args[1], maps)
                 
             })
 
@@ -158,23 +178,7 @@ module.exports = {
             clearRoster(message);
             clearTeams();
         }
-        if (args[0] === 'test') {
-            if (message.author.id != '183934154558275584') return;
-            const rosterArray = ['STEAM_0:1:11898431', 'STEAM_1:1:.....', 'STEAM_1:1:.....', 'STEAM_1:1:.....', 'STEAM_1:1:.....'];
-            const testRoster = new Roster(rosterArray);
-            if (!args[1]) return message.channel.send('Gimme a map, for example "de_dust2"');
-            fs.readFile('./games/maps.json', (err, content) => {
-                if (err) return console.error(err);
-                const maps = JSON.parse(content);
-                if (!nameDoesNotExist(args[1], maps)) return message.channel.send(`Accepted maps: ${maps.map(map => map.name).join(", ")}`);
-                //select a random map
-                
-                args[1] = getSingleMap(args[1], maps)
-                console.log('Random map is:', args[1].name)
-                startServer(testRoster, args[1], message, bot, child);
-            })
-            /*if succeeded lets read the ready scrim json and do some validation*/
-        }
+
         if (args[0] === 'map') {
             if (args[1] === 'add') {
                 if (args[2]) {
@@ -194,7 +198,7 @@ module.exports = {
                     maps = JSON.parse(maps)
                     if (workshopURL.hostname.toLowerCase() !== 'steamcommunity.com') return message.channel.send("URL doesn't point to steamcommunnity.com, match this format <https://steamcommunity.com/sharedfiles/filedetails/?id=2484335179>")
                     if (!workshopID) return message.channel.send("No params, match this format <https://steamcommunity.com/sharedfiles/filedetails/?id=2484335179>")
-                    if (idDoesNotExist(workshopID, maps)) return message.channel.send("The map is already on the list")
+                    if (utils.idDoesNotExist(workshopID, maps)) return message.channel.send("The map is already on the list")
                     message.channel.send("Adding the map most likely succeeded!")
                     getWorkshopDataFromSteam(workshopID, maps, bot, message)
                 }
@@ -332,33 +336,7 @@ function scrimTeamsEmbed(team1, team2) {
         .addField(`Team 2 - ${team2.length}`, team2.join('\n') || 'empty', true);
     return embed
 }
-/**
- * This is nameDoesNotExist because for some reason I cant make the function work like I want it
- * One possible fix would be to do return !array.some--- but thats for another time 
- * @param {string} map name 
- * @param {array} put in json with name as a field  
- * @returns {boolean}
- */
-function nameDoesNotExist(value, array) {
-    return array.some(e => e.name.toLowerCase() === value.toLowerCase());
-}
 
-/**
- * This is idDoesNotExist because for some reason I cant make the function work like I want it
- * One possible fix would be to do return !array.some--- but thats for another time 
- * @param {string} map name 
- * @param {array} put in json with name as a field  
- * @returns {boolean}
- */
-function idDoesNotExist(value, array) {
-    return array.some(e => e.id.toLowerCase() === value.toLowerCase());
-}
-function getSingleMap(value, array) {
-    const mapObj = array.filter(map => {
-        return map.name.toLowerCase() === value.toLowerCase();
-    })
-    return mapObj[0];
-}
 
 /**
  * Stupidly long function that does million things
@@ -391,7 +369,7 @@ function getWorkshopDataFromSteam(workshopID, maps, bot, message) {
         });
         res.on('end', () => {
             result = JSON.parse(result);
-            let mapName = sanitizeMapName(result.response.publishedfiledetails[0].title)
+            let mapName = utils.sanitizeMapName(result.response.publishedfiledetails[0].title)
             mapObj.name = mapName
             mapObj.id = workshopID;
             mapObj.url = workshopURL.href;
@@ -414,14 +392,4 @@ function getWorkshopDataFromSteam(workshopID, maps, bot, message) {
     });
     req.write(xFormBody);
     req.end();
-}
-
-function sanitizeMapName(mapName) {
-    let mapName2 = mapName.replace(/ /g, '-');
-    mapName2 = mapName2.replace(/\(/g, '');
-    mapName2 = mapName2.replace(/\)/g, '');
-    mapName2 = mapName2.replace(/\|/g, '');
-    mapName2 = mapName2.replace(/\[/g, '');
-    mapName2 = mapName2.replace(/\]/g, '');
-    return mapName2
 }
